@@ -1,0 +1,48 @@
+import  pandas as pd
+
+file_path = "MJX.csv" #this might need to be changed depending on what it is named
+df = pd.read_csv(file_path)
+
+
+# Replace M with Na for clarity and ease of use
+df_cleaned= df.replace("M", pd.NA)
+
+
+#all the columns we can analyze
+columns = ["station", "valid", "tmpf", "dwpf", "relh", "drct", "sknt", "p01i", "alti", "mslp", "vsby", "gust", "skyc1",
+"skyc2", "skyc3", "skyc4", "skyl1", "skyl2", "skyl3", "skyl4", "wxcodes", "ice_accretion_1hr", "ice_accretion_3hr", 
+"ice_accretion_6hr", "peak_wind_gust", "peak_wind_drct", "peak_wind_time", "feel", "metar", "snowdepth"]
+
+####################################################################################################################
+#create list from the column names
+"""
+Turns names in a list variable
+example print(skyl2) will print all variables in that row as list. 
+"""
+
+variables = {}
+for col in df_cleaned.columns:
+    variables[col] = df_cleaned[col].tolist()
+
+
+####################################################################################################################
+#I have to fix this but it should only find descriptive for numeric values
+numeric_data = df_cleaned.apply(pd.to_numeric, errors='coerce')
+
+# descriptive stats dictionary
+stats_dict = {}
+
+# dictionary mean, median, and std
+for col in columns_to_analyze:
+    if col in numeric_data.columns:
+        mean = numeric_data[col].mean()
+        median = numeric_data[col].median()
+        std = numeric_data[col].std()
+        stats_dict[col] = {
+            "Mean": mean,
+            "Median": median,
+            "Std": std
+        }
+
+# example
+print(stats_dict.get("feel"))
